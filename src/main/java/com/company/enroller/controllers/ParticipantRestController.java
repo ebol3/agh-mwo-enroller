@@ -40,13 +40,14 @@ public class ParticipantRestController {
 		participantService.add(participant);
 		return new ResponseEntity<Participant>(participant, HttpStatus.OK);
 	}
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteParticipant(@PathVariable("id") String login) {
-		Participant participant = participantService.findByLogin(login);
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<?> updateParticipant(@PathVariable("id") String login,@RequestBody Participant participant) {
+		Participant foundParticipant = participantService.findByLogin(login);
 		if (participant == null) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
-		participantService.delete(participant);
+		foundParticipant.setPassword(participant.getPassword());
+		participantService.update(foundParticipant);
 		return new ResponseEntity<Participant>(participant, HttpStatus.OK);
 	}
 }
